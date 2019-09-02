@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sender: MyString
+  text: MyText
+  ta_duty_id: 1
+  ta_duty_type: MyString
+
+two:
+  sender: MyString
+  text: MyText
+  ta_duty_id: 1
+  ta_duty_type: MyString
