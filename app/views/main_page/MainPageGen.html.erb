@@ -1,1 +1,24 @@
-<h1> Test</h1>
+
+<div class="wrapper">
+<% if auth_user_signed_in? %>
+<!--Navbar-->
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+      <strong><%= current_auth_user.email %></strong></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" <%= link_to 'Edit profile', edit_auth_user_registration_path %></a>
+        <a class="dropdown-item" <%= link_to 'Sign out', destroy_auth_user_session_path  %></a>
+      </div>
+    </li>
+</nav>
+<%  else  %>
+
+<%= link_to 'Sign up', new_auth_user_registration_path  %>
+
+<%= link_to 'Sign in', new_auth_user_session_path %>
+
+<%  end  %>
+</div>
+
+

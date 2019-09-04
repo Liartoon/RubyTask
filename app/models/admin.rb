@@ -1,2 +1,2 @@
-class Admin < ApplicationRecord
+class Admin < AuthUser
 end
