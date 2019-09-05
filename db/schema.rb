@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2019_09_04_140746) do
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.string "type"
+    t.string "type", default: "User"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_auth_users_on_email", unique: true
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2019_09_04_140746) do
   create_table "tasks", force: :cascade do |t|
     t.string "subject"
     t.integer "assignee_id"
-    t.string "status"
+    t.string "status", default: "To Do"
     t.text "description"
     t.integer "created_by_id"
     t.string "type"

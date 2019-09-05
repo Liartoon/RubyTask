@@ -12,6 +12,31 @@
       </div>
     </li>
 </nav>
+<% if current_auth_user.type == "Admin" %>
+<p>Admin </p>
+<div class="container">
+<div class="row">
+<div class="col-6">
+
+</div>
+<div class="col-6">
+
+</div>
+</div>
+</div>
+<%  else  %>
+<p>User </p>
+<div class="container" align="center">
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6">
+
+</div>
+<div class="col-3"></div>
+</div>
+</div>
+<%  end  %>
+
 <%  else  %>
 
 <%= link_to 'Sign up', new_auth_user_registration_path  %>
