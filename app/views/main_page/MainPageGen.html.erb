@@ -13,7 +13,7 @@
     </li>
 </nav>
 <% if current_auth_user.type == "Admin" %>
-<p>Admin </p>
+<p>Admin <%=current_auth_user.id %></p>
 <div class="container">
 <div class="row">
 <div class="col-6">
@@ -25,15 +25,57 @@
 </div>
 </div>
 <%  else  %>
-<p>User </p>
 <div class="container" align="center">
 <div class="row">
-<div class="col-3"></div>
-<div class="col-6">
+<div class="col-10"> 
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Assigned user</th>
+        <th>Status</th>
+        <th>Description</th>
+        <th>Creator</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% $user_tasks=Task.select{|task| task.assignee_id == current_auth_user.id}  
+        $user_tasks.each do |task|  
+         $counter+=1 %>
+        <tr>
+        <th><%= task.subject %></th>
+        <th><%= User.find(task.assignee_id).email %></th>
+        <th>
+
+        
+                  <% (["To Do","In Progress","In Review","Done"]).each do |st|%>
+                          <% if st == task.status %>
+                          <div class="form-check">
+                          <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio<%= $counter%>" checked="checked" 
+                          <%= (task.status!="In Review" and task.status!="Done") ? ((st=="Done") ? "disabled" : "" ) : "disabled" %>
+                          ><%= st %> </label>
+                          </div>
+                          <% else %>
+                          <div class="form-check">
+                          <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio<%= $counter%>" 
+                          <%= (task.status!="In Review" and task.status!="Done") ? ((st=="Done") ? "disabled" : "" ) : "disabled" %>
+                          ><%= st %> </label>
+                          </div>
+                          <% end %>
+                  <% end %>
+        <th><%= task.description %></th>
+        <th><%= Admin.find(task.created_by_id).email %></th>
+        </tr>
+        <%   end  %>
+    </tbody>
+  </table>
+
 
 </div>
-<div class="col-3"></div>
-</div>
+<div class="col-2"></div>
 </div>
 <%  end  %>
 
