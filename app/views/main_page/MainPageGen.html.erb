@@ -41,6 +41,7 @@
 
     <tbody>
       <% $user_tasks=Task.select{|task| task.assignee_id == current_auth_user.id}  
+      $counter=0
         $user_tasks.each do |task|  
          $counter+=1 %>
         <tr>

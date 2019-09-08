@@ -16,33 +16,27 @@ Task.delete_all
 Comment.delete_all
 
 
-def writeToFile(fileName, email, encrypted_password)
-    aFile = File.new(fileName, "r+")
-    if aFile
-       aFile.syswrite(email + " " + encrypted_password)
-       else
-       puts "Unable to open file!"
-       end
+def writeToFile(fileName, email, e_password)
+       File.open(fileName, 'w') { |file| file.write(email + " " + e_password) }
 end
 
-$authUserArray=Array.new
+
 (1..$adminNum).each do |i|
-    $email=Faker::Internet.email
-    $encrypted_password=Faker::Internet.password
-    writeToFile("admin_logpass.txt", $email, $encrypted_password)
-    $id = Admin.create(email: $email, password: $encrypted_password)
-    $authUserArray=$authUserArray + Array.new(size=1, obj = $id)
+    email=Faker::Internet.email
+    e_password=Faker::Internet.password(min_length: 8, max_length: 10)
+    writeToFile("admin_logpass.txt", email, e_password)
+    $id = Admin.create(email: email, password: e_password)
+    (i==1) ? $authUserArray=Array.new(size=1, obj = $id) : $authUserArray=$authUserArray + Array.new(size=1, obj = $id)
+    
  end 
  
 (1..$userNum).each do |i|
-    $email=Faker::Internet.email
-    $encrypted_password=Faker::Internet.password
-    writeToFile("user_logpass.txt", $email, $encrypted_password)
-    $id= User.create(email: $email, password: $encrypted_password)
-    $authUserArray=$authUserArray + Array.new(size=1, obj = $id)
+    email=Faker::Internet.email
+    e_password=Faker::Internet.password(min_length: 8, max_length: 10)
+    writeToFile("user_logpass.txt", email, e_password)
+    $id= User.create(email: email, password: e_password)
+    (i==1) ? $authUserArray=Array.new(size=1, obj = $id) : $authUserArray=$authUserArray + Array.new(size=1, obj = $id)
  end
-
-
 
 
  (1..$taskNum).each do |i|
@@ -65,12 +59,17 @@ $authUserArray=Array.new
     created_by_id: $admin_id, type: "Story")
  end
 
- (1..$commentNum).each do |i|
-    $authUser=(1 + rand($adminNum+$userNum))
+
+
+ 
+(1..$commentNum).each do |i|
+    $authUser=$authUserArray.sample.id
+
     $ref_com_type=((rand(2)==0) ? "Comment" : "Task")
     $ref_com_id=(($ref_com_type=="Comment") ? Comment.select{|comment| true}.sample.id : Task.select{|comment| true}.sample.id)
     
     Comment.create(sender: $authUser, comment_text: Faker::Alphanumeric.alphanumeric(number: 50, min_alpha: 50),
      ta_duty_id: $ref_com_id, ta_duty_type: $ref_com_type)
  end
+ 
     
