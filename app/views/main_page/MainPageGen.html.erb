@@ -69,6 +69,7 @@
                   <% end %>
         <th><%= task.description %></th>
         <th><%= Admin.find(task.created_by_id).email %></th>
+        <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
         </tr>
         <%   end  %>
     </tbody>

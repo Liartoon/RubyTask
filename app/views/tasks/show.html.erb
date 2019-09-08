@@ -1,0 +1,104 @@
+<div class="wrapper">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+      <strong><%= current_auth_user.email %></strong></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" <%= link_to 'Edit profile', edit_auth_user_registration_path %></a>
+        <a class="dropdown-item" <%= link_to 'Sign out', destroy_auth_user_session_path  %></a>
+      </div>
+    </li>
+</nav>
+<% if current_auth_user.type == "Admin" %>
+<p>Admin <%=current_auth_user.id %></p>
+<div class="container">
+<div class="row">
+<div class="col-6">
+
+</div>
+<div class="col-6">
+
+</div>
+</div>
+</div>
+<%  else  %>
+<div class="container" >
+<div class="row">
+<div class="col-10"> 
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Assigned user</th>
+        <th>Status</th>
+        <th>Description</th>
+        <th>Creator</th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+        <th><%= @task.subject %></th>
+        <th><%= User.find(@task.assignee_id).email %></th>
+        <th>
+                  <% (["To Do","In Progress","In Review","Done"]).each do |st|%>
+                          <% if st == @task.status %>
+                          <div class="form-check">
+                          <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio" checked="checked" 
+                          <%= (@task.status!="In Review" and @task.status!="Done") ? ((st=="Done") ? "disabled" : "" ) : "disabled" %>
+                          ><%= st %> </label>
+                          </div>
+                          <% else %>
+                          <div class="form-check">
+                          <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio" 
+                          <%= (@task.status!="In Review" and @task.status!="Done") ? ((st=="Done") ? "disabled" : "" ) : "disabled" %>
+                          ><%= st %> </label>
+                          </div>
+                          <% end %>
+                  <% end %>
+        <th><%= @task.description %></th>
+        <th><%= Admin.find(@task.created_by_id).email %></th>
+        <th><a class="btn btn-secondary" role="button" <%= link_to "Submit", root_path %></a></th>
+        </tr>
+    </tbody>
+  </table>
+
+
+</div>
+<div class="col-2" align="center"></div>
+</div>
+<div class="container" >
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6">
+<% task_comments=Comment.select{|c| @task.id == c.ta_duty_id and c.ta_duty_type == "Task"}  %>
+<div class=" display-4">Comments </div>
+<% task_comments.each do |task_comment|  %>
+
+<div class="comment">
+<dl>
+    <dt><%= AuthUser.find(task_comment.sender).email%></dt>
+    <dd><%= task_comment.comment_text%></dd>
+  </dl> 
+</div>
+<% comment_comments=Comment.select{|c| task_comment.id == c.ta_duty_id and c.ta_duty_type == "Comment"}  %>
+        <% if comment_comments != nil %>
+        <% comment_comments.each do |comment_comment|  %>
+        <div class="comment">
+        <dl>
+        <dt>---<%= AuthUser.find(task_comment.sender).email%></dt>
+        <dd>---<%= comment_comment.comment_text%></dd>
+        </dl> 
+        </div>
+        <%  end %>
+    <%  end %>
+<%  end %>
+</div>
+<div class="col-3"></div>
+</div>
+</div>
+<%  end  %>
+
+</div>

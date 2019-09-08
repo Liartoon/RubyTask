@@ -20,7 +20,6 @@ def writeToFile(fileName, email, e_password)
        File.open(fileName, 'w') { |file| file.write(email + " " + e_password) }
 end
 
-
 (1..$adminNum).each do |i|
     email=Faker::Internet.email
     e_password=Faker::Internet.password(min_length: 8, max_length: 10)
@@ -44,7 +43,7 @@ end
     when 0 
         $stat="To Do"
     when 1 
-        $stat="In Progess"
+        $stat="In Progress"
     when 2 
         $stat="In Review"
     when 3 
