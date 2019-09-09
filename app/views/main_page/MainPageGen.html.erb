@@ -10,7 +10,8 @@
         <a class="dropdown-item" <%= link_to 'Sign out', destroy_auth_user_session_path  %></a>
       </div>
 </nav>
-<% if current_auth_user.type == "Admin" %>
+<% if current_auth_user.type == "Admin"%>
+<% $sort_id=(request.env['REQUEST_URI'])[-1,1]%>
 <div class="container-fluid">
 <div class="row">
 <div class="col-6">
@@ -19,24 +20,34 @@
     <thead>
       <tr>
         <th>Subject</th>
-        <th>Assigned user</th>
-        <th>Description</th>
-        <th>Creator</th>
+        <th><%= link_to "Assigned User", root_path($sort_id => 1), :class => "btn btn-info", onclick: $sort_id=$sort_id.to_i  %></th><br />
+        <th><%= link_to "Creator", root_path($sort_id => 2), :class => "btn btn-info" , onclick: $sort_id=$sort_id %></th>
+        <th><%= link_to "Status", root_path($sort_id => 3), :class => "btn btn-info", onclick: $sort_id=$sort_id %></th>
       </tr>
     </thead>
 
-    <tbody>
-      <% $admin_tasks_in_review=Task.select{|task| task.created_by_id == current_auth_user.id}  
-      $counter=0
-              if $admin_tasks_in_review!= nil
+    <tbody> 
+    <% $admin_tasks_in_review=Task.select{|task| task.created_by_id == current_auth_user.id}
+    case $sort_id
+    when 1 
+    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| a.assignee_id <=> b.assignee_id}
+    when 2 
+    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| a.created_by_id <=> b.created_by_id}
+    when 3 
+    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| a.status <=> b.status}
+    else
+    $admin_tasks_in_review=$admin_tasks_in_review
+    end %>
+        
+              <%if $admin_tasks_in_review!= nil
                 $admin_tasks_in_review.each do |task|  
                    %>
                 <tr>
                 <th><%= task.subject %></th>
                 <th><%= User.find(task.assignee_id).email %></th>
 
-                <th><%= task.description %></th>
                 <th><%= Admin.find(task.created_by_id).email %></th>
+                <th><%= task.status %></th>
                 <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
                 </tr>
                 <%   end  %>
@@ -51,9 +62,9 @@
     <thead>
       <tr>
         <th>Subject</th>
-        <th>Assigned user</th>
-        <th>Description</th>
+        <th>Assigned User</th>
         <th>Creator</th>
+        <th>Status</th>
       </tr>
     </thead>
 
@@ -66,9 +77,9 @@
                 <tr>
                 <th><%= task.subject %></th>
                 <th><%= User.find(task.assignee_id).email %></th>
-
-                <th><%= task.description %></th>
                 <th><%= Admin.find(task.created_by_id).email %></th>
+                <th><%= task.status %></th>
+                
                 <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
                 </tr>
                 <%   end  %>
@@ -90,24 +101,23 @@
     <thead>
       <tr>
         <th>Subject</th>
-        <th>Assigned user</th>
-        <th>Status</th>
-        <th>Description</th>
+        <th>Assigned User</th>
         <th>Creator</th>
+        <th>Status</th>
       </tr>
     </thead>
 
     <tbody>
-      <% $user_tasks=Task.select{|task| task.assignee_id == current_auth_user.id}  
+      <% $user_tasks=Task.select{|task| task.assignee_id == current_auth_user.id} 
+       
       $counter=0
         $user_tasks.each do |task|  
          $counter+=1 %>
         <tr>
         <th><%= task.subject %></th>
         <th><%= User.find(task.assignee_id).email %></th>
-        <th><%= task.status %>
-        <th><%= task.description %></th>
         <th><%= Admin.find(task.created_by_id).email %></th>
+        <th><%= task.status %>
         <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
         </tr>
         <%   end  %>
