@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+      <strong><%= current_auth_user.email %></strong></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" <%= link_to 'Edit profile', edit_auth_user_registration_path %></a>
+        <a class="dropdown-item" <%= link_to 'Sign out', destroy_auth_user_session_path  %></a>
+      </div>
+</nav>
+<div class="display-4" align="center">Edit Task</div>
+<div class="container">
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6" align="center">
+
+<%= simple_form_for :task, url: task_path(@task), method: :patch do |t| %>
+  <div class="field">
+    <%= "Subject" %>
+    <%= t.input :subject, label: false %>
+  </div>
+<div class="field">
+    <%= "Assignee id" %><br />
+    <%= t.input :assignee_id, label: false %>
+  </div>
+  <div class="field">
+    <%= "Status" %><br />
+    <%= t.input :status, default: "To Do", label: false, collection: ["To Do","In Progress","In Review","Done"] %>
+  </div>
+  <div class="field">
+    <%= "Description" %><br />
+    <%= t.input :description, label: false %>
+  </div>
+  <div class="field">
+    <%= "Type" %>
+    <%= t.input :type, default: "Issue", label: false, collection: ["Issue","Story"]%><br>
+  </div>
+  <div class="actions ">
+    <%= t.submit "Update", { class: 'btn btn-secondary' }%>
+  </div>
+<% end %>
+
+</div>
+<div class="col-3"></div>
+</div>
+</div>
+

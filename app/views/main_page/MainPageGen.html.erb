@@ -3,23 +3,49 @@
 <% if auth_user_signed_in? %>
 <!--Navbar-->
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-<li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
       <strong><%= current_auth_user.email %></strong></a>
       <div class="dropdown-menu">
         <a class="dropdown-item" <%= link_to 'Edit profile', edit_auth_user_registration_path %></a>
         <a class="dropdown-item" <%= link_to 'Sign out', destroy_auth_user_session_path  %></a>
       </div>
-    </li>
 </nav>
 <% if current_auth_user.type == "Admin" %>
-<p>Admin <%=current_auth_user.id %></p>
 <div class="container">
 <div class="row">
-<div class="col-6">
+<div class="col-8">
+<div class="display-4">Tasks In Review </div>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Assigned user</th>
+        <th>Description</th>
+        <th>Creator</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% $admin_tasks_in_review=Task.select{|task| task.created_by_id == current_auth_user.id and task.status == "In Review"}  
+      $counter=0
+              if $admin_tasks_in_review!= nil
+                $admin_tasks_in_review.each do |task|  
+                   %>
+                <tr>
+                <th><%= task.subject %></th>
+                <th><%= User.find(task.assignee_id).email %></th>
+
+                <th><%= task.description %></th>
+                <th><%= Admin.find(task.created_by_id).email %></th>
+                <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
+                </tr>
+                <%   end  %>
+        <%   end  %>
+    </tbody>
+  </table>
 
 </div>
-<div class="col-6">
+<div class="col-4">
 
 </div>
 </div>
