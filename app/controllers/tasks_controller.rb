@@ -12,7 +12,11 @@ class TasksController < ApplicationController
     end
     
     def task_params
-    params.require(:task).permit(:subject, :assignee_id, :status, :description, @task.created_by_id, :type)
+        if current_auth_user.type == "Admin"
+            params.require(:task).permit(:subject, :assignee_id, :status, :description, @task.created_by_id, :type)
+        else
+            params.require(:task).permit(:subject, :assignee_id, :status, :description, @task.created_by_id, :type)
+        end
     end
     
     def destroy

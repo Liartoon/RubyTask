@@ -11,10 +11,42 @@
       </div>
 </nav>
 <% if current_auth_user.type == "Admin" %>
-<div class="container">
+<div class="container-fluid">
 <div class="row">
-<div class="col-8">
-<div class="display-4">Tasks In Review </div>
+<div class="col-6">
+<div class="display-4" align="center">Created Tasks</div>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Assigned user</th>
+        <th>Description</th>
+        <th>Creator</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% $admin_tasks_in_review=Task.select{|task| task.created_by_id == current_auth_user.id}  
+      $counter=0
+              if $admin_tasks_in_review!= nil
+                $admin_tasks_in_review.each do |task|  
+                   %>
+                <tr>
+                <th><%= task.subject %></th>
+                <th><%= User.find(task.assignee_id).email %></th>
+
+                <th><%= task.description %></th>
+                <th><%= Admin.find(task.created_by_id).email %></th>
+                <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
+                </tr>
+                <%   end  %>
+        <%   end  %>
+    </tbody>
+  </table>
+
+</div>
+<div class="col-6">
+<div class="display-4" align="center">Tasks In Review </div>
 <table class="table table-striped">
     <thead>
       <tr>
@@ -45,14 +77,14 @@
   </table>
 
 </div>
-<div class="col-4">
+</div>
 
 </div>
 </div>
-</div>
 <%  else  %>
-<div class="container" align="center">
+<div class="container-fluid" align="center">
 <div class="row">
+<div class="col-1"> </div>
 <div class="col-10"> 
   <table class="table table-striped">
     <thead>
@@ -73,26 +105,7 @@
         <tr>
         <th><%= task.subject %></th>
         <th><%= User.find(task.assignee_id).email %></th>
-        <th>
-
-        
-                  <% (["To Do","In Progress","In Review","Done"]).each do |st|%>
-                          <% if st == task.status %>
-                          <div class="form-check">
-                          <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="optradio<%= $counter%>" checked="checked" 
-                          <%= (task.status!="In Review" and task.status!="Done") ? ((st=="Done") ? "disabled" : "" ) : "disabled" %>
-                          ><%= st %> </label>
-                          </div>
-                          <% else %>
-                          <div class="form-check">
-                          <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="optradio<%= $counter%>" 
-                          <%= (task.status!="In Review" and task.status!="Done") ? ((st=="Done") ? "disabled" : "" ) : "disabled" %>
-                          ><%= st %> </label>
-                          </div>
-                          <% end %>
-                  <% end %>
+        <th><%= task.status %>
         <th><%= task.description %></th>
         <th><%= Admin.find(task.created_by_id).email %></th>
         <th><a href="tasks/<%= task.id%>" class="btn btn-secondary" role="button">View</a></th>
@@ -103,7 +116,7 @@
 
 
 </div>
-<div class="col-2"></div>
+<div class="col-1"></div>
 </div>
 <%  end  %>
 
