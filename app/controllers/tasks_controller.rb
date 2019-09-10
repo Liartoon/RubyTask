@@ -26,6 +26,16 @@ class TasksController < ApplicationController
 
     end
     
+    def createcomment
+        @comment = Comment.new(comment_params)
+        @comment.save
+        redirect_to task_path
+
+    end
+    def comment_params
+        params.require(:comment).permit(:sender,:comment_text,:ta_duty_id,:ta_duty_type)
+    end
+
     def create
         @task = Task.new(task_params)
         if @task.save

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   match "/tasks/:id/edit" => "tasks#edit", :via => :post
   match "/tasks/new" => "tasks#create", :via => :post
+  match "/tasks/:id" => "tasks#createcomment", :via => :post
   resources :tasks
   
 end

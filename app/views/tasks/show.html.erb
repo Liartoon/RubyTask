@@ -78,7 +78,24 @@
         <%  end %>
     <%  end %>
 <%  end %>
+<div class="comment_input" align="center">
+<%= simple_form_for :comment do |t| %>
+<%= t.input :sender, :input_html => {:value => current_auth_user.id} , :as => :hidden,  label: false %>
+<div class="field">
+    <%= "Comment text" %>
+    <%= t.input :comment_text, label: false %>
+  </div>
+  <%= t.input :ta_duty_id, :input_html => {:value => @task.id} , :as => :hidden,  label: false %>
+  <%= t.input :ta_duty_type, :input_html => {:value => "Task"} , :as => :hidden,  label: false %>
+  <p></p>
+  <div class="actions ">
+    <%= t.submit "Update", { class: 'btn btn-secondary' }%>
+  </div>
+  <p></p>
+<% end %>
 </div>
+</div>
+
 <div class="col-3"></div>
 </div>
 </div>
@@ -120,9 +137,7 @@
         <% end %>
         </th>
         <% end %>
-        <% if @task.status=="In Review" or @task.status=="Done" %>
-        <%= @task.status %>
-        <% end %>
+        
         
         </tr>
     </tbody>
@@ -158,6 +173,22 @@
         <%  end %>
     <%  end %>
 <%  end %>
+<div class="comment_input" align="center">
+<%= simple_form_for :comment do |t| %>
+<%= t.input :sender, :input_html => {:value => current_auth_user.id} , :as => :hidden,  label: false %>
+<div class="field">
+    <%= "Comment text" %>
+    <%= t.input :comment_text, label: false %>
+  </div>
+  <%= t.input :ta_duty_id, :input_html => {:value => @task.id} , :as => :hidden,  label: false %>
+  <%= t.input :ta_duty_type, :input_html => {:value => "Task"} , :as => :hidden,  label: false %>
+  <p></p>
+  <div class="actions ">
+    <%= t.submit "Update", { class: 'btn btn-secondary btn-lg' }%>
+  </div>
+  <p></p>
+<% end %>
+</div>
 </div>
 <div class="col-3"></div>
 </div>
