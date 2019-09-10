@@ -3,4 +3,10 @@ class MainPageController < ApplicationController
     def MainPageGen
 
     end
+    def Sql1
+
+    end
+    def Sql2
+
+    end
 end

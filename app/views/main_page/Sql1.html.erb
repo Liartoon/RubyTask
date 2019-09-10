@@ -1,0 +1,34 @@
+
+<% $sql1=User.select{ |user| Task.where(status: "Done",assignee_id: user.id).count > 
+(Task.where(status: "To Do",assignee_id: user.id).count +
+Task.where(status: "In Progress",assignee_id: user.id).count +
+Task.where(status: "In Review",assignee_id: user.id).count)}  %>
+
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6 text-center">
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User</th>
+      </tr>
+    </thead>
+
+    <tbody>         
+              <%if $sql1!= nil
+                $sql1.each do |user| %>
+                <tr>
+                <th><%= user.email %></th>
+                </tr>
+                <%   end  %>
+        <%   end  %>
+    </tbody>
+  </table>
+<%= link_to "Back", root_path,  class: 'btn btn-secondary btn-block'  %>
+</div>
+<div class="col-3"></div>
+</div>
+</div>

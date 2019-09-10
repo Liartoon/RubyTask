@@ -1,15 +1,20 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
-
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+      <strong><%= current_auth_user.email %></strong></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" <%= link_to 'Edit profile', edit_auth_user_registration_path %></a>
+        <a class="dropdown-item" <%= link_to 'Sign out', destroy_auth_user_session_path  %></a>
+      </div>
+</nav>
+<div class="display-4" align="center">Edit <%= current_auth_user.type %></div>
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 <div class="container">
 <div class="row">
 <div class="col-3"></div>
-<div class="col-6" align="center"></div>
-<div class="col-3"></div>
-</div>
-</div>
-  <div class="field">
+<div class="col-6" align="center">
+
+<div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
@@ -36,14 +41,19 @@
     <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
     <%= f.password_field :current_password, autocomplete: "current-password" %>
   </div>
-
+<p> </p>
   <div class="actions">
-    <%= f.submit "Update" %>
+    <%= f.submit "Update", { class: 'btn btn-secondary' } %>
   </div>
 <% end %>
 
-<h3>Cancel my account</h3>
+<p> <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete,  class: 'btn btn-secondary'  %></p>
 
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+<%= link_to "Back", :back,  class: 'btn btn-secondary btn-block'  %>
 
-<%= link_to "Back", :back %>
+</div>
+<div class="col-3"></div>
+</div>
+</div>
+  
+

@@ -1,0 +1,31 @@
+
+<% $sql2=Admin.select{ |admin|  (User.select{|user| (Task.where(status: "In Progress",assignee_id: user.id, created_by_id: admin.id)).count>1}) != nil ? true : false} %>
+
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-3"></div>
+<div class="col-6 text-center">
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Admin</th>
+      </tr>
+    </thead>
+
+    <tbody>         
+              <%if $sql2!= nil
+                $sql2.each do |admin| %>
+                <tr>
+                <th><%= admin.email %></th>
+                </tr>
+                <%   end  %>
+        <%   end  %>
+    </tbody>
+  </table>
+<%= link_to "Back", root_path,  class: 'btn btn-secondary btn-block'  %>
+</div>
+<div class="col-3"></div>
+</div>
+</div>
