@@ -12,11 +12,7 @@ class TasksController < ApplicationController
     end
     
     def task_params
-        if current_auth_user.type == "Admin"
-            params.require(:task).permit(:subject, :assignee_id, :status, :description, @task.created_by_id, :type)
-        else
-            params.require(:task).permit(:subject, :assignee_id, :status, :description, @task.created_by_id, :type)
-        end
+         params.require(:task).permit(:subject, :assignee_id, :status, :description, :created_by_id, :type)
     end
     
     def destroy
@@ -29,14 +25,16 @@ class TasksController < ApplicationController
     def new
 
     end
+    
     def create
         @task = Task.new(task_params)
         if @task.save
-            redirect_to @task, notice: "The task was created!"
+            redirect_to root_path
           else
             render 'new'
           end
     end
+
     def show
         @task=Task.find(params[:id])
     end

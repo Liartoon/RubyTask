@@ -30,11 +30,11 @@
     <% $admin_tasks_in_review=Task.select{|task| task.created_by_id == current_auth_user.id}
     case $sort_id
     when 1 
-    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| a.assignee_id <=> b.assignee_id}
+    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| b.assignee_id <=> a.assignee_id}
     when 2 
-    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| a.created_by_id <=> b.created_by_id}
+    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| b.created_by_id <=> a.created_by_id}
     when 3 
-    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| a.status <=> b.status}
+    $admin_tasks_in_review=$admin_tasks_in_review.sort{|a,b| b.status <=> a.status}
     else
     $admin_tasks_in_review=$admin_tasks_in_review
     end %>
@@ -86,7 +86,7 @@
         <%   end  %>
     </tbody>
   </table>
-
+<%= link_to "Add new user", new_task_path, :class => "btn btn-success btn-block"  %>
 </div>
 </div>
 
